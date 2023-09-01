@@ -28,6 +28,7 @@ func main() {
     router.POST("/albums", postAlbmus)
 
     router.PUT("/albums/:id", updateAlbumId)
+    router.DELETE("albums/:id", deleteAlbumByID)
     
     router.Run("localhost:8080")
 }
@@ -85,6 +86,29 @@ func updateAlbumId(c *gin.Context) {
 
      c.IndentedJSON(http.StatusOK, gin.H{"message": "album was not found"})
 }
+
+
+func deleteAlbumByID(c *gin.Context) {
+
+    id := c.Param("id")
+
+    indexToDelete := -1
+
+    for i, a := range albums {
+        if a.ID == id {
+            indexToDelete = i
+            break
+        }
+    }
+
+    if indexToDelete != -1 {
+        albums = append(albums[:indexToDelete], albums[indexToDelete+1:]...)
+        c.IndentedJSON(http.StatusOK, gin.H{"message": "album deleted"})
+    } else {
+        c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+    }
+}
+
 
 func sayHiFromAPI(c *gin.Context) {
     c.IndentedJSON(http.StatusOK, "Hi from API")
