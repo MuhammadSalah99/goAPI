@@ -8,16 +8,19 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin123
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - 8080:8080
     volumes:
-      - ./app:/app
+      - ./:/app
     environment:
-      - GIN_MODE=release
+      - GIN_MODE=debug
+    stdin_open: true
+    tty: true
     depends_on:
       - db 
 

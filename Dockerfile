@@ -1,12 +1,13 @@
-FROM golang:1.19
+FROM golang:latest
 
-WORKDIR /app
+WORKDIR /go/src/app/
 
 COPY . .
 
-RUN go build -o main .
+RUN go mod download -x
+
+RUN go install -mod=mod github.com/githubnemo/CompileDaemon
 
 EXPOSE 8080
 
-CMD ["./main"]
-
+ENTRYPOINT CompileDaemon --build="go build main.go" --command="./main"
